@@ -1535,6 +1535,8 @@ TR_ValueProfileInfo::createAndInitializeProfilerInfo(
    TR_HashFunctionType hash = BitShiftHash;
    if (comp->cg()->getSupportsBitPermute())
       hash = BitIndexHash;
+   if (comp->cg()->getSupportsFastMaskExtract())
+      hash = BitMaskHash;
 
    TR_AbstractProfilerInfo *valueInfo = NULL;
    switch (kind)

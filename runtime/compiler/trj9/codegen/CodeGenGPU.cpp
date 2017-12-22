@@ -841,6 +841,11 @@ static const char * nvvmOpCodeNames[] =
    NULL,          // TR::ibitpermute,
    NULL,          // TR::lbitpermute,
 
+   NULL,          // TR::bmaskextract,
+   NULL,          // TR::smaskextract
+   NULL,          // TR::imaskextract,
+   NULL,          // TR::lmaskextract,
+
    NULL,          // TR::Prefetch
 
 /*

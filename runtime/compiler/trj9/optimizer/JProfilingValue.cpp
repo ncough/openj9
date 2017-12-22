@@ -881,6 +881,17 @@ TR_JProfilingValue::computeHash(TR::Compilation *comp, TR_AbstractHashTableProfi
       // Convert to the platform address width
       hash = convertType(hash, TR::Compiler->target.is64Bit() ? TR::Int64 : TR::Int32);
       }
+   else if (table->getHashType() == BitMaskHash)
+      {
+      // Build the bit permute tree
+      TR::Node *hashAddr = TR::Node::create(value, addSys, 2, baseAddr, TR::Node::create(value, constSys, 0, table->getHashOffset()));
+      hash = TR::Node::create(value, value->getDataType() == TR::Int32 ? TR::imaskextract : TR::lmaskextract, 2);
+      hash->setAndIncChild(0, value);
+      hash->setAndIncChild(1, hashAddr);
+
+      // Convert to the platform address width
+      hash = convertType(hash, TR::Compiler->target.is64Bit() ? TR::Int64 : TR::Int32);
+      }
    else if (table->getHashType() == BitShiftHash)
       {
       // Common operations, based on the value's width
@@ -912,8 +923,6 @@ TR_JProfilingValue::computeHash(TR::Compilation *comp, TR_AbstractHashTableProfi
             hash = bitExtract;
          }
       }
-   else
-      TR_ASSERT(0, "Unsupported hash type");
 
    return hash;
    }
